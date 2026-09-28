@@ -5,7 +5,7 @@ permissions:
 
 on:
   schedule:
-    - cron: "0 0 * * *" # every day
+    - cron: "17 22 * * *" # daily 06:17 Asia/Shanghai, off the UTC midnight peak
   workflow_dispatch:
 
 jobs:
@@ -17,7 +17,9 @@ jobs:
     steps:
       # Step 1: run a standard checkout action
       - name: Checkout target repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       # Step 2: run the sync action
       - name: Sync upstream changes
@@ -31,6 +33,7 @@ jobs:
 
           # Set test_mode true to run tests instead of the true action!!
           test_mode: false
+          shallow_since: '2020-01-01'
 
       - name: Sync check
         if: failure()
